@@ -1,4 +1,7 @@
+# Local CodeQL install and scan outputs
 private/
+tools/
+runs/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
