@@ -1,15 +1,14 @@
 ---
 name: codeql
-description: Install (latest CodeQL bundle) or locate the project-local CodeQL CLI in .claude/skills/codeql/codeql/ and put it on PATH. Use before running any codeql command, or when codeql is missing or needs to be updated.
+description: Install (latest CodeQL bundle) or locate the project-local CodeQL CLI in tools/codeql/ and put it on PATH. Use before running any codeql command, or when codeql is missing or needs to be updated.
 ---
 
 # CodeQL install (project-local)
 
-CodeQL lives inside this skill's directory, not globally:
+CodeQL lives in the repo's `tools/` directory, not globally:
 
 ```
-.claude/skills/codeql/
-├── SKILL.md
+<repo>/tools/
 └── codeql/            ← CodeQL bundle
     ├── codeql         ← executable
     ├── python/
@@ -23,7 +22,7 @@ CodeQL lives inside this skill's directory, not globally:
 
 ```bash
 REPO="$(git rev-parse --show-toplevel)"
-"$REPO/.claude/skills/codeql/codeql/codeql" version
+"$REPO/tools/codeql/codeql" version
 ```
 
 If this prints a version, skip to step 5. Reinstall only if the user asks to update.
@@ -34,28 +33,29 @@ The bundle includes the CodeQL CLI and the standard query packs (including Pytho
 
 ```bash
 REPO="$(git rev-parse --show-toplevel)"
-curl -L -o "$REPO/.claude/skills/codeql/codeql-bundle.tar.gz" \
+mkdir -p "$REPO/tools"
+curl -L -o "$REPO/tools/codeql-bundle.tar.gz" \
   https://github.com/github/codeql-action/releases/latest/download/codeql-bundle-linux64.tar.gz
 ```
 
 ## 3. Extract and remove the archive
 
-The archive's top-level directory is `codeql/`, so extracting into `.claude/skills/codeql/` creates `.claude/skills/codeql/codeql/`.
+The archive's top-level directory is `codeql/`, so extracting into `tools/` creates `tools/codeql/`.
 
 ```bash
 REPO="$(git rev-parse --show-toplevel)"
-tar -xzf "$REPO/.claude/skills/codeql/codeql-bundle.tar.gz" -C "$REPO/.claude/skills/codeql/"
-rm "$REPO/.claude/skills/codeql/codeql-bundle.tar.gz"
+tar -xzf "$REPO/tools/codeql-bundle.tar.gz" -C "$REPO/tools/"
+rm "$REPO/tools/codeql-bundle.tar.gz"
 ```
 
-When updating, first delete `.claude/skills/codeql/codeql/`, then run steps 2–3.
+When updating, first delete `tools/codeql/`, then run steps 2–3.
 
 ## 4. Verify
 
 ```bash
 REPO="$(git rev-parse --show-toplevel)"
-"$REPO/.claude/skills/codeql/codeql/codeql" version
-"$REPO/.claude/skills/codeql/codeql/codeql" resolve languages
+"$REPO/tools/codeql/codeql" version
+"$REPO/tools/codeql/codeql" resolve languages
 ```
 
 The language list must include `python`.
@@ -65,13 +65,5 @@ The language list must include `python`.
 Shell state does not persist between commands, so prefix each command that uses CodeQL:
 
 ```bash
-export PATH="$(git rev-parse --show-toplevel)/.claude/skills/codeql/codeql:$PATH"
-```
-
-## 6. Keep it out of git
-
-The install is large (~1.4 GB). Make sure `.gitignore` contains:
-
-```
-.claude/skills/codeql/codeql/
+export PATH="$(git rev-parse --show-toplevel)/tools/codeql:$PATH"
 ```

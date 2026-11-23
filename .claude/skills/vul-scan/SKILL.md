@@ -32,10 +32,10 @@ Vulnerability types (slugs):
 
 ## Step 0: Setup
 
-1. CodeQL is project-local (see the `codeql` skill). If `<repo>/.claude/skills/codeql/codeql/codeql` does not exist, stop and tell the user to install it.
+1. CodeQL is project-local (see the `codeql` skill). If `<repo>/tools/codeql/codeql` does not exist, stop and tell the user to install it.
 2. Shell state does not persist between Bash calls. Prefix **every** CodeQL command with:
    ```bash
-   export PATH="$(git rev-parse --show-toplevel)/.claude/skills/codeql/codeql:$PATH"
+   export PATH="$(git rev-parse --show-toplevel)/tools/codeql:$PATH"
    ```
 3. Never let CodeQL write outside the project. Pass these two options to **every** `codeql` command:
    ```
