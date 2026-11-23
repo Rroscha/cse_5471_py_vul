@@ -3,6 +3,7 @@ private/
 tools/
 runs/
 .claude/skills/codeql/codeql/
+repos/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
