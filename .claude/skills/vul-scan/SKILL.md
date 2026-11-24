@@ -192,7 +192,7 @@ codeql database analyze $RUN/db $RUN/queries --format=sarif-latest \
 
 ## Step 7: Findings → `$RUN/findings/`
 
-Read `custom.sarif` (`runs[0].results[]`; each result's path is in `codeFlows[0].threadFlows[0].locations[]`). Drop consecutive duplicate path steps. If several results share the same source and sink, keep one.
+Read `custom.sarif` (`runs[0].results[]`). A result can have several code flows: CodeQL groups different source-to-sink paths that end at the same sink into one result. Read **every** `codeFlows[i].threadFlows[0].locations[]` of every result, not only `codeFlows[0]`; each code flow is one candidate path. Drop consecutive duplicate path steps. Deduplicate by (rule, source location, sink location): keep one path per triple.
 
 Write one file per finding: `$RUN/findings/F<NNN>-<slug>.md`, numbered from `F001`, sorted by type then by sink file and line. Format:
 
